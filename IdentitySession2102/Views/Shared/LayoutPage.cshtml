@@ -1,0 +1,93 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using IdentitySession2102.data
+@inject SignInManager<ApplicationUser> signInManager
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>LayoutPage</title>
+    <link href="~/lib/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/twitter-bootstrap/js/bootstrap.js"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="navbar-inverse">
+                <div class="navbar-brand">
+                   Identity System
+                </div>
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-target="#menu1" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <div id="menu1" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        @if (signInManager.IsSignedIn(User))
+                        {
+                            <li>
+                                <a asp-controller="Employee" asp-action="Index">Employee</a>
+                            </li>
+                            <li>
+                                <a asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                            </li>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li>
+                                    <a asp-controller="Account" asp-action="NewRole">Add Role</a>
+                                </li>
+                            }
+                        }
+                        </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        @if (signInManager.IsSignedIn(User))
+                        {
+                            <li>
+                                <a asp-controller="Account" asp-action="SignOut">
+                                    <span class="glyphicon glyphicon-log-out"></span>
+                                </a>
+                            </li>
+                            @if (User.IsInRole("Admin")) { 
+                            <li>
+                                <a asp-controller="Account" asp-action="Index">
+                                    <span class="glyphicon glyphicon-user"></span>
+                                </a>
+                            </li>
+                            }
+                            <li>
+                                <span style="color:white">@User.Identity.Name</span>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a asp-controller="Account" asp-action="SignIn">
+                                    <span class="glyphicon glyphicon-log-in"></span>
+                                </a>
+                            </li>
+
+                        }
+                    </ul>
+                </div>
+
+            </nav>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                @RenderSection("Body")
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
